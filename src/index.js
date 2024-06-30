@@ -8,20 +8,31 @@ import express from "express";
 const app = express();
 
 dotenv.config({
-    path: './env'
+  path: "./env",
+});
+
+connectDB().
+then(()=>{
+  app.listen(process.env.PORT || 8000, ()=>{
+    console.log(`App is listening on PORT ${process.env.PORT}`)
+  })
+  app.on('error',(error)=>{
+      console.log('Error:',error)
+      throw error
+  })
 })
-
-connectDB()
-
+.catch((error)=>{
+      console.log("MongoDb connection failed!!!", error);
+})
 
 // (async ()=>{
 //     try {
-//         await mongoose.connect(`${process.env.MONGODB_URI}/${DB_NAME}`)  
+//         await mongoose.connect(`${process.env.MONGODB_URI}/${DB_NAME}`)
 //         app.on('error',(error)=>{
-//             console.log(error)
+//             console.log(error) 
 //             throw error
 //         })
-        
+
 //         app.listen(process.env.PORT,()=>{
 //             console.log(`App is listening on PORT ${process.env.PORT}`)
 //         })
